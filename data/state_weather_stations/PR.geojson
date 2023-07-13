@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "PR",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "USAF": "785140", "WBAN": 11603, "STATION NAME": "RAFAEL HERNANDEZ AIRPORT", "CTRY": "US", "STATE": "PR", "ICAO": "TJBQ", "LAT": 18.495, "LON": -67.129, "ELEV(M)": 72.2, "BEGIN": 20060101, "END": 20221231 }, "geometry": { "type": "Point", "coordinates": [ -67.129, 18.495 ] } },
+{ "type": "Feature", "properties": { "USAF": "785145", "WBAN": 11653, "STATION NAME": "EUGENIO MARIA DE HOSTOS AIRPORT", "CTRY": "US", "STATE": "PR", "ICAO": "TJMZ", "LAT": 18.254, "LON": -67.149, "ELEV(M)": 11.6, "BEGIN": 20050101, "END": 20170810 }, "geometry": { "type": "Point", "coordinates": [ -67.149, 18.254 ] } },
+{ "type": "Feature", "properties": { "USAF": "785260", "WBAN": 11641, "STATION NAME": "LUIS MUNOZ MARIN INTERNATIONAL AP", "CTRY": "US", "STATE": "PR", "ICAO": "TJSJ", "LAT": 18.433, "LON": -66.011, "ELEV(M)": 3.0, "BEGIN": 20050101, "END": 20221231 }, "geometry": { "type": "Point", "coordinates": [ -66.011, 18.433 ] } },
+{ "type": "Feature", "properties": { "USAF": "785265", "WBAN": 494, "STATION NAME": "FERNANDO LUIS RIBAS DOMINICCI AIRPORT", "CTRY": "US", "STATE": "PR", "ICAO": "TJIG", "LAT": 18.457, "LON": -66.098, "ELEV(M)": 3.1, "BEGIN": 20110223, "END": 20221231 }, "geometry": { "type": "Point", "coordinates": [ -66.098, 18.457 ] } },
+{ "type": "Feature", "properties": { "USAF": "785350", "WBAN": 11630, "STATION NAME": "NAVAL STATION ROOSEVELT ROADS CEIBA", "CTRY": "US", "STATE": "PR", "ICAO": "TJNR", "LAT": 18.255, "LON": -65.641, "ELEV(M)": 10.1, "BEGIN": 19730101, "END": 20221231 }, "geometry": { "type": "Point", "coordinates": [ -65.641, 18.255 ] } }
+]
+}

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Use correct character set. -->
+	<meta charset="utf-8">
+	<!-- Tell IE to use the latest, best version. -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>Model Setup Interface</title>
+	<script src="../../../cesium/Build/Cesium/Cesium.js"></script>
+	<script src="../ThirdParty/jquery/jquery.js"></script>
+	<script src="../ThirdParty/dexie/dexie.js"></script>
+
+	<script type="text/javascript" src="../ThirdParty/datatables/datatables.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.css">
+	<style>
+		@import url(../../../cesium/Apps/Sandcastle/templates/bucket.css);
+		@import url(toolbarstyle.css);
+
+		#loading {
+			border: 16px solid #f3f3f3;
+			/* Light grey */
+			border-top: 16px solid #3498db;
+			/* Blue */
+			border-radius: 50%;
+			width: 60px;
+			height: 60px;
+			animation: spin 2s linear infinite;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -18px;
+		}
+
+		#loading2 {
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid blue;
+			border-right: 16px solid green;
+			border-bottom: 16px solid red;
+			border-left: 16px solid pink;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+	<script src="../../../cesium/ThirdParty/jshint-2.13.4/jshint.js"></script>
+	<script src="../../../cesium/Apps/Sandcastle/jsHintOptions.js"></script>
+	<script src="../../../cesium/Apps/Sandcastle/Sandcastle-header.js"></script>
+	<script src='../ThirdParty/plotly/plotly-latest.min.js'></script>
+
+	<link rel="stylesheet" href="../../../cesium/ThirdParty/dojo-release-1.10.4/dijit/themes/claro/claro.css">
+
+
+	<script>
+		dojoConfig = {
+			parseOnLoad: true
+		}
+
+	</script>
+	<script src='../../../cesium/ThirdParty/dojo-release-1.10.4/dojo/dojo.js'></script>
+
+	<script>
+		require([
+			"dojo/parser",
+			"dijit/Calendar",
+			"dijit/Dialog",
+			"dojo/domReady!",
+			"dojo/on",
+			"dijit/form/Button",
+			"dijit/form/Form",
+			"dijit/form/TextBox",
+			"dijit/form/DateTextBox",
+			"dojo/dom-style"
+
+		]);
+
+	</script>
+
+</head>
+
+<body onload="validDate()" class="claro">
+
+	<div id="cesiumContainer" class="fullSize"> </div>
+
+
+
+	<div id="toolbar" style='display:block'>
+
+		<div id="Menus" class="panel">
+
+
+			<div id="Main" class="ModelMenu">
+				<table id="ModelMenuTable">
+					<tbody>
+						<tr>
+							<td>
+								<div id="Role"></div>
+							</td>
+						</tr>
+						<tr>
+
+							<td>
+								<div id="Group"></div>
+							</td>
+							<td><button class="add" onclick="AddModelerGroup()">ADD</button><button class="edit"
+									onclick="EditModelerGroup()">EDIT</button>
+								<button class="del" onclick="DeleteModelerGroup()">DEL</button>
+							</td>
+						</tr>
+						<tr>
+
+							<td>
+								<div id="Pest"></div>
+							</td>
+							<td><button class="add" onclick="AddPest()">ADD</button><button class="del"
+									onclick="DeletePest()">DEL</button></td>
+						</tr>
+
+						<tr>
+							<td>
+								<div id="Source"></div>
+							</td>
+							<td><button class="add" onclick="AddSource()">ADD</button><button class="del"
+									onclick="DeleteSource()">DEL</button></td>
+						</tr>
+
+						<tr>
+							<td>
+								<div id="Template"></div>
+							</td>
+							<td><button id="add" class="add" onclick="AddTemplate()">ADD</button><button class="del"
+									onclick="DeleteTemplate()">DEL</button></td>
+						</tr>
+
+					</tbody>
+				</table>
+
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<div id="inputs"> </div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div id="parameters"> <br></div>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+				<div id="SavedModels"> </div>
+				<div id="SaveRuns"> </div>
+
+			</div>
+			<div> &nbsp;&nbsp; &nbsp; &nbsp; </div>
+			<div id=Stations class=ModelMenu style='display:none'>
+
+				<div id="obstype"></div>
+
+
+				<div id="PeriodElem" style='display:none'>
+					<br><label for="PeriodBegin">Period: Begin (BioFix Date) </label><br>
+					
+					<input id="PeriodBegin" type="text" data-dojo-type="dijit/form/DateTextBox"
+						data-dojo-props="onChange: function(){dijit.byId('PeriodEnd').constraints.min = arguments[0]; periodFilter()}, required: true"
+						promptMessage="yyyy-MM-dd" constraints="{datePattern:'yyyy-MM-dd', strict:true}"
+						required="true">
+					<br> <br>
+					
+					<br><label for="PeriodEnd"> Period: End<label> <br>
+							<input id="PeriodEnd" type="text" data-dojo-type="dijit/form/DateTextBox"
+								data-dojo-props="onChange: function(){dijit.byId('PeriodBegin').constraints.max = arguments[0]; periodFilter()}, required: true"
+								promptMessage="yyyy-MM-dd" constraints="{datePattern:'yyyy-MM-dd', strict:true}"
+								required="true">
+							<br>
+					</div>
+
+							<div id="stationElem" style='display:none'>
+								<div id="StationType">
+									<br>Station: <br>
+								</div>
+								<table>
+									<tr>
+										<td><input id="Station" type="text" value="72306013722" autocomplete="on"
+												placeholder="Select a station" value="title=" Type in a Station name">
+										</td>
+										<datalist id="StationsList">
+										</datalist>
+										<td><button id="addStation" style="display:none" class="add"
+												onclick="addStations()">ADD</button></td>
+									</tr>
+								</table><br>
+
+								<div id="mstation" onclick="console.log(userstations);">
+									<ul id="StationList"
+										style="display:none; height:100px; overflow:hidden; overflow-y:scroll; list-style-image: url('../images/x.png');"
+										dir="rtl" ;="" )=""></ul>
+								</div>
+							</div>
+
+
+							<br><button id="run" style='display:none'
+								onclick=" fromRunClick = false;checkmodelmode()">Run</button>
+
+							<div id="ActiveRuns" style='display:none'>
+								<div id="SaveRun"></div>
+							</div>
+							<div id="frequency" style='display:none'></div>
+							<div id="recipient" style='display:none'></div>
+							<div id="delivery" style='display:none'></div>
+							<div id="units" style='display:none'></div>
+							<button id="ScheduleButton" style='display:none' onclick="ScheduleModelMenu()"> Schedule
+								Model </button>
+				
+			</div>
+			<div> &nbsp;&nbsp; &nbsp; &nbsp; </div>
+			<div id="schedulepanel" class="ModelMenu" style='display:none'>
+				<div id="Container" class="schedule">
+					<div id="Inactive" style='display:block'>
+						Inactive
+						<br>
+						<ul id="InactiveUserModels"
+							style="height:350px; overflow:hidden; overflow-y:scroll; list-style-image: url('../images/x.png');"
+							dir="rtl" ;> </ul>
+					</div>
+					<div> &nbsp;&nbsp; </div>
+					<div> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+						<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+
+						<img src="../images/right-xxl.png" onclick="activateruns()" alt="Right Arrow" width="30"
+							height="20">
+						<br><br><br>
+						<img src="../images/left-xxl.png" onclick="deactivateruns()" alt="Left Arrow" width="30"
+							height="20">
+					</div>
+					<div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<div id=Active style='display:block'>
+						Active
+						<br>
+						<ul id="ActiveUserModels"
+							style="height:350px; overflow:hidden; overflow-y:scroll; list-style-image: url('../images/x.png');"
+							dir="rtl" ;>empty</ul>
+					</div>
+					<button id="CloseSchedulePanel" onclick="HideSchedulePanel()"> Close Schedule </button>
+				</div>
+			</div>
+			<div> &nbsp;&nbsp; &nbsp; &nbsp; </div>
+
+			<div id=Schedule class=ModelMenu style='display:none'>
+				Products in Queue Waiting QC
+			</div>
+
+
+		</div>
+	</div>
+	<div id="loading" style='display:none'></div>
+
+	<div id="loading2" style='display:none'></div>
+
+	<div id="AddModelTemplateSource" class='claro' data-dojo-type='dijit/Dialog' data-dojo-id='AddModelTemplateSource'
+		title='Template Source'>
+
+	</div>
+	<div id="SavedRADDModels" class='claro' data-dojo-type='dijit/Dialog' data-dojo-id='SavedRADDModels'
+	title='Saved RADD Models &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; '>
+
+</div>
+
+
+	<div id="WeatherData" class='claro' data-dojo-type='dijit/Dialog' data-dojo-id='WeatherData' title='Model Results'>
+
+	</div>
+
+	<div id="Charts" class='claro' data-dojo-type='dijit/Dialog' data-dojo-id='Charts' title='Charts'>
+		<div id="ChartTemps"> </div>
+		<div id="ChartDD"> </div>
+		<div id="ChartAD"> </div>
+	</div>
+
+	<div data-dojo-type="dijit/Dialog" class='claro' id="ModelPrompt" data-dojo-id='ModelPrompt'
+		title="Save As Model Window" style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="PoiPrompt" data-dojo-id='PoiPrompt'
+		title="Name point of interest" style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="AOIPrompt" data-dojo-id='AOIPrompt'
+		title="Name area of interest" style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="ModelWarning" data-dojo-id='ModelWarning'
+		title="Delete Model Warning" style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="CSVPrompt" data-dojo-id='CSVPrompt' title="Download CSV Window"
+		style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="RenamePrompt" data-dojo-id='RenamePrompt'
+		title="Rename Model Window" style="display: none"></div>
+	<div data-dojo-type="dijit/Dialog" class='claro' id="RADDPrompt" data-dojo-id='RADDPrompt'
+		title="Radd Parameter set" style="display: none"></div>
+	
+
+	<!--This code is for commercial companies-->
+	<div data-dojo-type="dijit/Dialog" class='claro' id="ModelTemplateSource" data-dojo-id='ModelTemplateSource'
+		title="Select Model Template Source" style="display: none"></div>
+
+	<!--	<script src='commercialfunctions.js'></script> -->
+	<script src='models/GWModel.js'></script>
+	<script src='models/Models.js'></script>
+	<script src='models/ThirdPartyModels/NCSU/ICSModel.js'></script>
+	<script src='mapLoaderFunctions.js'></script>
+	<script src='getWeather.js'></script>
+	<script src='SaveRun.js'></script>
+	<script src='SaveAsModel.js'></script>
+	<script src='HelperFunctions.js'></script>
+	<script src='HelperFunctions2.js'></script>
+	<script src='DataFlow.js'></script>
+	<script src='DatabaseFunctions.js'></script>
+	<script src='LocalPoints.js'></script>
+	<script src='HRRRFunctions.js'></script>
+	<script src='URMAFunctions.js'></script>
+	<script src='ReUsableFunctions.js'></script>
+	<script src='ChartFunctions.js'></script>
+	<script src='OperatorFunctions.js'></script>
+	<script src='IdentityFunctions.js'></script>
+	<script src='Menus.js'></script>
+	<script src='globals.js'></script>
+	<script src='RunModels.js'></script>
+	
+	<!-- <script src='./data/states/NewJersey/NewJerseyCounties.js'></script> -->
+
+</body>
+
+</html>

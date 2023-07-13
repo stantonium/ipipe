@@ -1,0 +1,55 @@
+.ModelMenu {
+          background: rgba(42, 42, 42, 0.8);
+          padding: 4px;
+          border-radius: 10px;
+      }
+
+      #toolbar input {
+          vertical-align: middle;
+          padding-top: 2px;
+          padding-bottom: 2px;
+      }
+
+      .cal {
+          vertical-align: middle;
+      }
+
+      .modal {
+	  display: none;
+	  position: fixed;
+	  z-index: 1;
+	  padding-top: 100px;
+      }
+
+      .modal-content {
+	  background: rgba(42, 42, 42, 0.8);
+          padding: 4px;
+          border-radius: 10px;
+	  margin: auto;
+	  width: 100%;
+      }
+
+      .close {
+	 color: #fefefe;
+	 float: right;
+	 font-size: 28px;
+	 font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+	 color: #aaaaaa;
+	 text-decoration: none;
+	 cursor: pointer;
+      }
+      .panel{
+      display: grid;
+      grid-template-columns: auto auto auto auto auto auto auto;
+      grid-template-rows: auto 30px;	
+      }
+      .schedule{
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+        grid-template-rows: auto auto auto 30px;	
+        }
+
