@@ -5,9 +5,9 @@
 // Initialize Cesium viewer
 const viewer = new Cesium.Viewer('cesiumContainer', {
 	//sceneMode: Cesium.SceneMode.SCENE2D,
-	imageryProvider: Cesium.createWorldImagery({
-		style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
-	}),
+	//imageryProvider: Cesium.createWorldImagery({
+	//	style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
+	//}),
 	baseLayerPicker: true,
 	sceneModePicker: true,
 	timeline: false,
